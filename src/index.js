@@ -8,7 +8,6 @@ import { getRefs } from "./js/getRefs";
 const refs = getRefs();
 
 const options = {
-  root: document.querySelector("#scrollArea"),
   rootMargin: "400px",
   threshold: 0,
 };

@@ -13,7 +13,6 @@ async function fetchPictures(searchQuery) {
     }
 
     const config = {
-      meathod: 'GET',
       headers: {
         'Content-Type': 'application/json'
       },
