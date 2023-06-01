@@ -51,7 +51,10 @@ function onObserverPagination(entries) {
     if (entry.isIntersecting) {
       fetchPictures(query).then(resp => {
         if (resp.data.totalHits <= refs.gallery.children.length) {
-        observer.unobserve(refs.guard);
+          observer.unobserve(refs.guard);
+          if (resp.data.totalHits < 17) {
+            return;
+          }
         Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
         return;
       }
