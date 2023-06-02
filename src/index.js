@@ -11,7 +11,6 @@ const options = {
   rootMargin: "400px",
   threshold: 0,
 };
-
 const observer = new IntersectionObserver(onObserverPagination, options);
 
 refs.form.addEventListener('submit', onFormSubmit);
@@ -20,49 +19,64 @@ const lightbox = new SimpleLightbox('.gallery a');
 
 let query = '';
 
-function onFormSubmit(e) {
+async function onFormSubmit(e) {
   e.preventDefault();
 
   query = e.currentTarget.elements.searchQuery.value.trim();
 
   if (query === '') {
     Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+    clearGallery()
     return;
   }
 
-  fetchPictures(query).then(resp => {
-    if (resp.data.hits.length < 1) {
+  try {
+    const pictures = await fetchPictures(query);
+    if (pictures.data.hits.length < 1) {
+      clearGallery()
       Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
       return;
     }
-    refs.gallery.innerHTML = '';
-    const markup = createCardMarkup(resp.data.hits);
-    refs.gallery.insertAdjacentHTML('beforeend', markup);
+    clearGallery();
+    renderMarkup(pictures.data.hits);
     lightbox.refresh();
-    Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images.`);
-    if (resp.data.totalHits > refs.gallery.children.length && refs.gallery.children.length >= 16) {
+    Notiflix.Notify.success(`Hooray! We found ${pictures.data.totalHits} images.`);
+    if (pictures.data.totalHits > refs.gallery.children.length && refs.gallery.children.length >= 16) {
       observer.observe(refs.guard);
     }
-  }).catch(console.log)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 function onObserverPagination(entries) {
-  entries.forEach(entry => {
+  entries.forEach(async entry => {
     if (entry.isIntersecting) {
-      fetchPictures(query).then(resp => {
-        if (resp.data.totalHits <= refs.gallery.children.length) {
+      try {
+        const pictures = await fetchPictures(query);
+        if (pictures.data.totalHits <= refs.gallery.children.length) {
           observer.unobserve(refs.guard);
-          if (resp.data.totalHits < 17) {
+          if (pictures.data.totalHits < 41) {
             return;
           }
         Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
         return;
-      }
-      const markup = createCardMarkup(resp.data.hits);
-      refs.gallery.insertAdjacentHTML('beforeend', markup);
-      lightbox.refresh();
+        }
+        renderMarkup(pictures.data.hits)
+        lightbox.refresh();
 
-      }).catch(console.log)
+      } catch (error) {
+        console.log(error);
+      }
     };
   });
+}
+
+function clearGallery() {
+  refs.gallery.innerHTML = '';
+}
+
+function renderMarkup(data) {
+  const markup = createCardMarkup(data);
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
 }

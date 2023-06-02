@@ -23,7 +23,7 @@ async function fetchPictures(searchQuery) {
         orientation: 'horizontal',
         safesearch: 'true',
         page: `${page}`,
-        per_page: '16',
+        per_page: '40',
       }
     }
 
