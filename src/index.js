@@ -43,7 +43,7 @@ function onFormSubmit(e) {
     if (resp.data.totalHits > refs.gallery.children.length && refs.gallery.children.length >= 16) {
       observer.observe(refs.guard);
     }
-  })
+  }).catch(console.log)
 }
 
 function onObserverPagination(entries) {
@@ -62,7 +62,7 @@ function onObserverPagination(entries) {
       refs.gallery.insertAdjacentHTML('beforeend', markup);
       lightbox.refresh();
 
-      })
+      }).catch(console.log)
     };
   });
 }
