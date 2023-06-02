@@ -1,3 +1,11 @@
+import SimpleLightbox from "simplelightbox";
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import { getRefs } from "./getRefs";
+
+const lightbox = new SimpleLightbox('.gallery a');
+
+const refs = getRefs();
+
 function createCardMarkup(arr) {
   return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) => {
     return `
@@ -24,4 +32,10 @@ function createCardMarkup(arr) {
   }).join('');
 }
 
-export { createCardMarkup };
+function renderMarkup(data) {
+  const markup = createCardMarkup(data);
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
+}
+
+export { renderMarkup };
