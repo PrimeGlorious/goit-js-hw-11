@@ -39,7 +39,7 @@ function onFormSubmit(e) {
     const markup = createCardMarkup(resp.data.hits);
     refs.gallery.insertAdjacentHTML('beforeend', markup);
     lightbox.refresh();
-    Notiflix.Notify.info(`Hooray! We found ${resp.data.totalHits} images.`);
+    Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images.`);
     if (resp.data.totalHits > refs.gallery.children.length && refs.gallery.children.length >= 16) {
       observer.observe(refs.guard);
     }
