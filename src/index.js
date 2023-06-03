@@ -3,7 +3,6 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import { getRefs } from "./js/getRefs";
 import { fetchPictures } from './js/fetchPictures';
 import Notiflix from 'notiflix';
-import { getRefs } from "./js/getRefs";
 
 const refs = getRefs();
 const lightbox = new SimpleLightbox('.gallery a');
@@ -47,7 +46,7 @@ async function onFormSubmit(e) {
   }
 }
 
-function onObserverPagination(entries) {
+async function onObserverPagination(entries) {
   entries.forEach(async entry => {
     if (entry.isIntersecting && refs.gallery.children.length >= 40 && includesHits > refs.gallery.children.length) {
       currentPage += 1;
