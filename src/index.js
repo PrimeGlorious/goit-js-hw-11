@@ -14,7 +14,6 @@ const observer = new IntersectionObserver(onObserverPagination, options);
 
 refs.form.addEventListener('submit', onFormSubmit);
 
-
 let currentPage = 1;
 let query = '';
 let includesHits = null;
@@ -66,12 +65,6 @@ async function onObserverPagination(entries) {
       }
     };
   });
-}
-
-function renderMarkup(data) {
-  const markup = createCardMarkup(data);
-  refs.gallery.insertAdjacentHTML('beforeend', markup);
-  lightbox.refresh();
 }
 
 function clearGalleryList() {
